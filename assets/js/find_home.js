@@ -84,10 +84,15 @@ document
     // Call the find-bros API to fetch the: closest server, and a list of all of the other servers.
     const joinBtn = document.getElementsByClassName('join-button')[0];
 
-    servers = await (await fetch('servers.json')).json();
-
     let region_code = '',
       country = 'us';
+
+    try {
+      servers = await (await fetch('servers.json')).json();
+    } catch (e) {
+      console.error(e);
+      alert('Could not load servers. Please reload the page');
+    }
 
     try {
       let res = await (await fetch('https://ipapi.co/json/')).json();
