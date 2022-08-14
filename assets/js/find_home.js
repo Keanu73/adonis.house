@@ -85,10 +85,18 @@ document
     const joinBtn = document.getElementsByClassName('join-button')[0];
 
     servers = await (await fetch('servers.json')).json();
-    let { region_code, country } = await fetchPlus('https://ipapi.co/json/');
 
-    region_code = region_code.toLowerCase();
-    country = country.toLowerCase();
+    let region_code = '',
+      country = 'us';
+
+    try {
+      let res = await (await fetch('https://ipapi.co/json/')).json();
+      region_code = res.region_code.toLowerCase();
+      country = res.country.toLowerCase();
+    } catch (e) {
+      console.error(e);
+      alert("There's been an error getting your location. Defaulting to USA");
+    }
 
     const geoServer =
       servers.find((s) => s.cc === `${country}-${region_code}`) || // First find exact match by country-region
